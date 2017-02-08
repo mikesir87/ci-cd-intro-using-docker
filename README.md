@@ -26,6 +26,7 @@ You're welcome to use whatever project you want, but feel free to fork my [mikes
 1. Go to https://github.com/mikesir87/cats
 2. Click the "Fork" button at the top-right corner.
 3. Clone the repository locally (doesn't matter SSH vs HTTP)
+
    ```bash
    git clone [your repository path]
    ```
@@ -60,33 +61,43 @@ In the `mikesir87/cats` repository is a `docker-compose-stack.yml` file that we 
 2. Open up https://play-with-docker.com/
 3. Create a new instance by hitting the **New Instance** in the left corner.
 4. Create a `docker-compose-stack.yml` file and paste in the contents of your updated `docker-compose-stack.yml`
+
    ```bash
    vi docker-compose-stack.yml
    [Press 'i' to enter INSERT mode; paste contents; hit ESC; type ':x'; press enter]
    ```
+
    You may have to re-align the contents
 5. Start a Swarm manager
+
    ```bash
    docker swarm init
    ```
+
    This will most likely fail with an error stating it doesn't know what address to use.  Copy the `10.0.*` address and run...
+
    ```bash
    docker swarm init --advertise-addr=[the address]
    ```
+
    and copy the `docker swarm join` command.
 6. Create another instance using the button in the left sidebar.
 7. Run the `docker swarm join` command.
 8. Feel free to create another instance.
 9. On your manager node (has a blue user icon in the list of instances), launch the stack...
+
    ```bash
    docker stack deploy -c docker-compose-stack.yml cats
    ```
+
 10. After a brief moment, you should see results when checking on the service 
+
    ```bash
    $ docker service ls
    ID            NAME          MODE        REPLICAS  IMAGE
    c7tfd9aufcxk  cats_cat-app  replicated  3/3       mikesir87/cats:latest
    ```
+
 11. You should notice a _5000_ link at the top of the page, on the same line as the IP. Clicking that will open that instance. Notice that refreshing will rotate through the running containers (yah routing mesh!!).
 
 
@@ -95,20 +106,24 @@ In the `mikesir87/cats` repository is a `docker-compose-stack.yml` file that we 
 
 1. Make a change to the `templates/index.html`. Feel free to change the body background color to another color.
 2. Commit and push the code.
+
    ```bash
    git add .
    git commit
    git push
    ```
+
 3. If you jump into the Docker Hub **Build Details** panel, you should see a build trigger shortly.
 
 
 ## Update your service
 1. In the Play with Docker panel, go to your Swarm Manager (instance with blue user icon).
 2. Update the service to use the latest image (swap out `mikesir87/cats` with the name of your image):
+
    ```bash
    docker service update cats_cat-app --image=mikesir87/cats:latest --force
    ```
+
 3. Wait for the deploy to roll out!  If you refresh, you might get the new version or the old.
 
 
